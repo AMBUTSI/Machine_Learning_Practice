@@ -2,8 +2,6 @@
 # coding: utf-8
 
 # In[1]:
-
-
 import seaborn as sns
 iris = sns.load_dataset('iris')
 
