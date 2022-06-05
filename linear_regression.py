@@ -1,183 +1,82 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+#load data
 import seaborn as sns
 iris = sns.load_dataset('iris')
-
-
-# In[2]:
-
-
 iris
 
-
-# In[3]:
-
-
+#reduce variables to two variables
 iris = iris[['petal_length', 'petal_width']]
-
-
-# In[4]:
-
-
 iris
 
-
-# In[10]:
-
+#Check whether the two variables are linearly correlated
+x = iris['petal_length']
+y = iris['petal_width']
 
 import matplotlib.pyplot as plt
 plt.scatter(x, y)
 plt.xlabel("petal length")
 plt.ylabel("petal width")
 
-
-# In[8]:
-
-
-x = iris['petal_length']
-y = iris['petal_width']
-
-
-# In[12]:
-
-
+#divide data between train and test data
+#0.4 - 40% for testing
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size =0.4, random_state=23)
 
-
-# In[13]:
-
-
 x_train
 
-
-# In[14]:
-
-
+#make x two-dimensional
 import numpy as np
 x_train = np.array(x_train).reshape(-1, 1)
-
-
-# In[15]:
-
-
 x_train
 
-
-# In[16]:
-
-
 x_test = np.array(x_test).reshape(-1,1)
-
-
-# In[17]:
-
-
 x_test
 
-
-# In[18]:
-
-
+#Import the Linear Regression model from the scikit-learn library
 from sklearn.linear_model import LinearRegression
-
-
-# In[19]:
-
-
 lr = LinearRegression()
 
-
-# In[20]:
-
-
+#fit the training data to the regression model
 lr.fit(x_train, y_train)
-
-
-# In[21]:
-
-
+#training parameters m and c
 c = lr.intercept_
-
-
-# In[22]:
-
-
 c
 
-
-# In[23]:
-
-
 m = lr.coef_
-
-
-# In[24]:
-
-
 m
 
-
-# In[25]:
-
-
+#predict the 'y' using x
 y_pred_train = m*x_train + c
 y_pred_train.flatten()
-
-
-# In[26]:
-
 
 y_pred_train1 = lr.predict(x_train)
 y_pred_train1
 
-
-# In[27]:
-
-
+#Add a line plot to check if the prediction is right
 import matplotlib.pyplot as plt
 plt.scatter(x_train, y_train)
 plt.plot(x_train, y_pred_train1, color='red')
 plt.xlabel("petal length")
 plt.ylabel("petal width")
 
-
-# In[28]:
-
-
+#check if the model works on test data as well
 y_pred_test1 = lr.predict(x_test)
 y_pred_test1
 
-
-# In[29]:
-
-
+#confirm if the prediction is right with a plot
 import matplotlib.pyplot as plt
 plt.scatter(x_test, y_test)
 plt.plot(x_test, y_pred_test1, color = 'red')
 plt.xlabel("petal length")
 plt.ylabel("petal width")
 
-
-# In[30]:
-
-
-pwd
-
-
-# In[31]:
-
-
+#Multiple Linear Regression
 import pandas as pd
 df = pd.read_csv('insurance.csv')
 df
-
-
-# In[32]:
-
-
+#Change string values to categorical values
 df['sex'] = df['sex'].astype('category')
 df['sex'] = df['sex'].cat.codes
 
@@ -187,70 +86,37 @@ df['smoker'] = df['smoker'].cat.codes
 df['region'] = df['region'].astype('category')
 df['region'] = df['region'].cat.codes
 
-
-# In[33]:
-
-
 df
-
-
-# In[34]:
-
-
+#Check if we have null values
 df.isnull().sum()
 
-
-# In[36]:
-
-
+#Separate x from y. 6 variables will be used to predict the expenses
 x = df.drop(columns = 'expenses')
 x
 
-
-# In[37]:
-
-
+#y will be the expenses
 y = df['expenses']
 
-
-# In[38]:
-
-
+#Create training and testing data
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3,random_state =23)
 
-
-# In[39]:
-
-
+#LinearRegression model
 lr_multiple = LinearRegression()
 lr_multiple.fit(x_train, y_train)
 
-
-# In[41]:
-
-
+#Training Parameters
 c = lr_multiple.intercept_
 c
 
-
-# In[42]:
-
-
 m = lr_multiple.coef_
 m
-
-
-# In[44]:
-
-
+#Predict price for training and test data
 y_pred_train = lr_multiple.predict(x_train)
 y_pred_test = lr_multiple.predict(x_test)
 
 
-# In[46]:
-
-
+#R2 to indicate goodness of fit
 from sklearn.metrics import r2_score
 r2_score(y_test, y_pred_test)
 
